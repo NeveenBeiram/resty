@@ -2,6 +2,7 @@ import './App.scss';
 import React from 'react';
 import Header from './header';
 import Main from './main';
+import Results from './results';
 import Footer from './footer';
 
 
@@ -10,24 +11,24 @@ class App extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      count : 0,
       results:[],
-      url:'',
-      headers:{}
-       
+      headers:'',
+      count : 0  
     }
+    this.handelForm=this.handelForm.bind(this);
   }
-  handelForm=(results , count ,headers , url)=>{
-    this.setState({results, count,headers,url})
+  
+  handelForm=(results , count ,headers )=>{
+    this.setState({results,count,headers})
   }
 
   render(){
     return(
       <React.Fragment>  
       <Header/>
-      <Footer/>
       <Main handler = {this.handelForm} />
-      {/* <Results res = {this.state}/> */}
+      <Results count = {this.state.count} results={this.state.results} headers={this.state.headers}/>
+      <Footer/>
       </React.Fragment>
     )
   }

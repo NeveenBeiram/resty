@@ -1,10 +1,18 @@
 div {
+    form{
+        text-align: center;
+    margin-left: 30px;   
+    }
     background-color: rgb(251, 251, 251);
     text-align: center;
+    margin-left: 30px;
+
     #buttonDiv{
         margin-top: 10px;
+        margin-bottom: 10px;
         button{
-            margin-right: 15px;
+            margin-right: 25px;
+            margin-left: 25px;
         }
 
     }
