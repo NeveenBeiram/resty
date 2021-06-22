@@ -8,7 +8,7 @@ render(){
         // https://swapi.dev/api/people'
         <React.Fragment>
         <div>
-        {/* <p>Headers : <JSONPretty data= {this.props.header}></JSONPretty></p> */}
+        <p>Headers : <JSONPretty data= {this.props.headers}></JSONPretty></p>
                     <p>count is {this.props.count}</p>
                     <p>Results : <JSONPretty  data={this.props.results}></JSONPretty> </p>
         </div>
