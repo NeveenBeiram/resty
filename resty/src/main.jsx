@@ -40,7 +40,7 @@ class Main extends React.Component {
       e.preventDefault();
       let req=this.state.url;
       let raw=await fetch(req);
-      let header=await fetch(req).then((res)=>{
+      let header =await fetch(req).then((res)=>{
         for(let pair of res.headers.entries()){
           let str='';
           for(let i=0;i<pair.length;i++){
@@ -51,6 +51,7 @@ if(i%2===0){
         }
       });
       let data=await raw.json()
+      console.log('header',header);
       const count=data.count;
       const results=data.results;
       this.props.handler(results,count,header)
