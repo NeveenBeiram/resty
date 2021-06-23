@@ -8,8 +8,11 @@ class Main extends React.Component {
       super(props);
       this.state = {
         url: '',
-        method:''
+        method:'',
+        body:{},
+        array:[]
       }
+      this.handleSubmit=this.handleSubmit.bind(this);
     }
     handleUrl = e =>{
         let url = e.target.value;
@@ -36,10 +39,23 @@ class Main extends React.Component {
       let method =e.target.value;
       this.setState({method})
     }
+
     handleSubmit =async e =>{
       e.preventDefault();
+      let textBody = e.target.body.value;
       let req=this.state.url;
-      let raw=await fetch(req);
+      // let raw=await fetch(req);
+      let raw;
+        if ((this.state.method === 'PUT' || this.state.method === 'POST') ){
+            raw = await fetch(req , {method : this.state.method , body :  textBody ,mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },});
+
+        }else if (this.state.method === 'GET' || this.state.method === 'DELETE' ) {
+
+           raw = await fetch(req , {method : this.state.method});
+        }
       let header =await fetch(req).then((res)=>{
         for(let pair of res.headers.entries()){
           let str='';
@@ -50,11 +66,40 @@ if(i%2===0){
           }return str;
         }
       });
-      let data=await raw.json()
+      let data=await raw.json();
+      let array=[];
+      if(data){
+        let str=`${this.state.method},${this.state.url},${textBody}`;
+        let oldR=JSON.parse(localStorage.getItem('request'))
+        if(oldR){
+          Object.values(oldR).map((item)=>{
+            if(!array.includes(item)){
+              array.push(item)
+            }
+          })
+        }
+        if(!array.includes(str)){
+          array.push(str)
+          localStorage.setItem('request',JSON.stringify(array));
+        }
+      }
+      console.log('data',data);
       console.log('header',header);
-      const count=data.count;
-      const results=data.results;
-      this.props.handler(results,count,header)
+      let results;
+        if (data.results){
+            results  = data.results;
+        }else {
+            results = data
+        }
+        let count;
+        if (data.count){    
+            count = data.count;
+        }else {
+            count = data.length
+        }
+      // const count=data.count;
+      // const results=data.results;
+      this.props.handler(results,count,header,array)
     }
   
     render() {
@@ -64,6 +109,7 @@ if(i%2===0){
                 <label>URL: </label>
               <input type="text"onChange={this.handleUrl}/>
               <button type="submit">Go!</button>
+            <textarea rows="4" cols="50" id="textarea" name="body" placeholder="please enter a json body"></textarea>
             </form>
             <div id="buttonDiv">
             <button onClick={this.handelMethod} value="GET">GET</button>
